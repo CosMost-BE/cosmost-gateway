@@ -1,0 +1,39 @@
+#cosmost-server-url.board=http://localhost:8081
+#cosmost-server-url.popularity=http://localhost:8082
+
+server:
+  port: 8000
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+
+        - id: comment-service
+          uri: http://localhost:8081/
+          predicates:
+            - Path=/v1/comments/**, /v1/view/**
+
+        - id: popularity-service
+          uri: http://localhost:8082/
+          predicates:
+            - Path=/v1/popularities/**
+
+
+        - id: cosmost-service
+          uri: http://localhost:8083/
+          predicates:
+            - Path=/v1/cosmosts/**, /v1/view/**
+
+        - id: auth-service
+          uri: http://localhost:8084/
+          predicates:
+            - Path=/v1/auths/**, /v1/view/**, /v1/signin, /v1/validation/**, /v1/authorization/**
+
+        - id: board-service
+          uri: http://localhost:8085/
+          predicates:
+            - Path=/v1/boards/**
+

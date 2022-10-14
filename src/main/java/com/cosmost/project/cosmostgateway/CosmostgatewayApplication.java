@@ -10,4 +10,7 @@ public class CosmostgatewayApplication {
         SpringApplication.run(CosmostgatewayApplication.class, args);
     }
 
+    // todo cors setting
+
+
 }
