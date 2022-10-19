@@ -1,13 +1,16 @@
 package com.cosmost.project.cosmostgateway.config;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 @Configuration
-public class CorsConfiguration {
+public class CorsConfig {
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -18,21 +21,6 @@ public class CorsConfiguration {
         corsConfiguration.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
-    }
-
-    private void setAllowCredentials(boolean b) {
-    }
-
-    private void addAllowedMethod(String s) {
-        
-    }
-
-    private void addAllowedOrigin(String s) {
-        
-    }
-
-    private void addAllowedHeader(String s) {
-        
     }
 
     @Bean
