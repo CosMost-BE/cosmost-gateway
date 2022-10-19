@@ -9,6 +9,20 @@ spring:
     name: gateway-service
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+      globalcors:
+        cors-configurations:
+          '[/**]':
+        allowedOrigins: "http://localhost:3000"
+        allow-credentials: true
+        allowedMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+
       routes:
 
         - id: comment-service
@@ -36,6 +50,8 @@ spring:
           uri: http://localhost:8085/
           predicates:
             - Path=/v1/boards/**
+
+
 
 token:
   expiration_time: 86400000
