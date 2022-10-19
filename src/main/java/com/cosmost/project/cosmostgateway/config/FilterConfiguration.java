@@ -6,12 +6,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class FilterConfig {
+public class FilterConfiguration {
 
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route()
+                .route( r -> r.path("/board-service/**")
+
+                )
                 .build();
     }
 }
