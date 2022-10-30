@@ -6,7 +6,7 @@ server:
 
 spring:
   application:
-    name: cosmost-gateway
+    name: gateway-service
   cloud:
     gateway:
       default-filters:
@@ -14,7 +14,7 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://localhost:3000"
+            allowedOrigins: "http://13.125.238.75:3000"
             allow-credentials: true
             allowedMethods:
               - GET
@@ -52,11 +52,11 @@ spring:
 
 token:
   expiration_time: 86400000
-  secret: user_token
+  secret: COS-MOST-TEAM-SECRET-KEY
 
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://13.125.238.75:8761/eureka
