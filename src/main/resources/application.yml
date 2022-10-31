@@ -4,36 +4,65 @@
 server:
   port: 8000
 
+management:
+  endpoint.health.probes.enabled: true
+  health:
+    livenessState.enabled: true
+    readinessState.enabled: true
+
 spring:
   application:
     name: gateway-service
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://gateway.cosmost.shop"
+            allow-credentials: true
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+
       routes:
-
-        - id: comment-service
-          uri: http://localhost:8081/
+        - id: auth-service
+          uri: http://auth.cosmost.shop
           predicates:
-            - Path=/v1/comments/**, /v1/view/**
-
-        - id: popularity-service
-          uri: http://localhost:8082/
-          predicates:
-            - Path=/v1/popularities/**
-
+            - Path=/v1/auth/**, /v1/view/**, /v1/signin, /v1/validation/**,
+              /v1/authorization/**, /auth-service/**
 
         - id: cosmost-service
-          uri: http://localhost:8083/
+          uri: http://cosmost.cosmost.shop
           predicates:
-            - Path=/v1/cosmosts/**, /v1/view/**
+            - Path=/v1/cosmosts/**, /v1/view/**, /cosmost-service/**
 
-        - id: auth-service
-          uri: http://localhost:8084/
+        - id: comment-service
+          uri: http://comment.cosmost.shop
           predicates:
-            - Path=/v1/auths/**, /v1/view/**, /v1/signin, /v1/validation/**, /v1/authorization/**
+            - Path=/v1/comments/**, /v1/view/**, /comment-service/**
+
+        - id: popularity-service
+          uri: http://popularity.cosmost.shop
+          predicates:
+            - Path=/v1/popularities/**, /pupularity-service/**
 
         - id: board-service
-          uri: http://localhost:8085/
+          uri: http://board.cosmost.shop
           predicates:
-            - Path=/v1/boards/**
+            - Path=/v1/boards/**, /board-service/**
 
+token:
+  expiration_time: 86400000
+  secret: COS-MOST-TEAM-SECRET-KEY
+
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://13.125.238.75:8761/eureka
