@@ -1,6 +1,3 @@
-#cosmost-server-url.board=http://localhost:8081
-#cosmost-server-url.popularity=http://localhost:8082
-
 server:
   port: 8000
 
@@ -9,6 +6,7 @@ management:
   health:
     livenessState.enabled: true
     readinessState.enabled: true
+
 
 spring:
   application:
@@ -29,40 +27,107 @@ spring:
               - DELETE
               - OPTIONS
 
+
+
+
       routes:
         - id: auth-service
           uri: http://auth.cosmost.shop
           predicates:
-            - Path=/v1/auth/**, /v1/view/**, /v1/signin, /v1/validation/**,
-              /v1/authorization/**, /auth-service/**
+            - Path=/v1/auths/**
+            - Method=PUT, GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/auth-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+        - id: auth-service
+          uri: http://auth.cosmost.shop
+          predicates:
+            - Path=/v1/signin/**, /v1/auths/**
+            - Method=POST
+
+        - id: auth-service
+          uri: http://auth.cosmost.shop
+          predicates:
+            - Path=/v1/validation/**, /v1/authorization/**, /v1/view/**
+            - Method=GET
+
+
+
 
         - id: cosmost-service
           uri: http://cosmost.cosmost.shop
           predicates:
-            - Path=/v1/cosmosts/**, /v1/view/**, /cosmost-service/**
+            - Path=/v1/cosmosts/**
+            - Method=POST, PUT, DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/cosmost-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+        - id: cosmost-service
+          uri: http://cosmost.cosmost.shop
+          predicates:
+            - Path=/v1/cosmosts/**
+            - Method=GET
+
+
 
         - id: comment-service
           uri: http://comment.cosmost.shop
           predicates:
-            - Path=/v1/comments/**, /v1/view/**, /comment-service/**
+            - Path=/v1/comments/**
+            - Method=POST, PUT, DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/comment-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+        - id: comment-service
+          uri: http://comment.cosmost.shop
+          predicates:
+            - Path=/v1/comments/**, /v1/view/**
+            - Method=GET
+
+
+
 
         - id: popularity-service
           uri: http://popularity.cosmost.shop
           predicates:
-            - Path=/v1/popularities/**, /pupularity-service/**
+            - Path=/v1/popularities/**
+            - Method=POST, DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/popularity-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+        - id: popularity-service
+          uri: http://popularity.cosmost.shop
+          predicates:
+            - Path=/v1/popularities/**, /v1/view/**
+            - Method=GET
+
+
+
 
         - id: board-service
           uri: http://board.cosmost.shop
           predicates:
-            - Path=/v1/boards/**, /board-service/**
+            - Path=/v1/boards/**
+            - Method=POST, DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/board-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+        - id: board-service
+          uri: http://board.cosmost.shop
+          predicates:
+            - Path=/v1/boards/**
+            - Method=GET
 
 token:
   expiration_time: 86400000
   secret: COS-MOST-TEAM-SECRET-KEY
-
-#eureka:
-#  client:
-#    register-with-eureka: true
-#    fetch-registry: true
-#    service-url:
-#      defaultZone: http://13.125.238.75:8761/eureka
