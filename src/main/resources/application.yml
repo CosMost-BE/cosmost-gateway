@@ -15,17 +15,7 @@ spring:
     gateway:
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "http://localhost:3000"
-            allow-credentials: true
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
+
 
 
 
@@ -50,7 +40,7 @@ spring:
         - id: auth-service
           uri: http://auth.cosmost.shop
           predicates:
-            - Path=/v1/validation/**, /v1/authorization/**, /v1/view/**
+            - Path=/v1/validation/**, /v1/authorization/**, /v1/view/info/**
             - Method=GET
 
 
@@ -87,7 +77,7 @@ spring:
         - id: comment-service
           uri: http://comment.cosmost.shop
           predicates:
-            - Path=/v1/comments/**, /v1/view/**
+            - Path=/v1/comments/**, /v1/view, /v1/view/ranking/rate/**
             - Method=GET
 
 
@@ -106,7 +96,7 @@ spring:
         - id: popularity-service
           uri: http://popularity.cosmost.shop
           predicates:
-            - Path=/v1/popularities/**, /v1/view/**
+            - Path=/v1/popularities/**, /v1/view/ranking/popularity/**
             - Method=GET
 
 
