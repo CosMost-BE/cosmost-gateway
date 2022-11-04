@@ -45,7 +45,7 @@ spring:
           uri: http://auth.cosmost.shop
           predicates:
             - Path=/v1/signin/**, /v1/auths/**
-            - Method=POST
+            - Method=POST, PUT
 
         - id: auth-service
           uri: http://auth.cosmost.shop
