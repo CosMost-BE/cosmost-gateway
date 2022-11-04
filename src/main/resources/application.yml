@@ -18,7 +18,7 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://gateway.cosmost.shop"
+            allowedOrigins: "https://lacalhost:3000"
             allow-credentials: true
             allowedMethods:
               - GET
@@ -35,7 +35,7 @@ spring:
           uri: http://auth.cosmost.shop
           predicates:
             - Path=/v1/auths/**
-            - Method=PUT, GET
+            - Method=GET
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/auth-service/(?<segment>.*), /$\{segment}
