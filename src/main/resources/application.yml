@@ -41,7 +41,7 @@ spring:
           uri: http://auth.cosmost.shop
           predicates:
             - Path=/v1/validation/**, /v1/authorization/**, /v1/view/info/**
-            - Method=GET
+            - Method=GET, PUT
 
 
 
