@@ -106,7 +106,7 @@ spring:
           uri: http://board.cosmost.shop
           predicates:
             - Path=/v1/boards/**
-            - Method=POST, DELETE
+            - Method=POST, DELETE, PUT
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/board-service/(?<segment>.*), /$\{segment}
