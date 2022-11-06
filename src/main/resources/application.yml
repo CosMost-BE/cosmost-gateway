@@ -1,0 +1,123 @@
+server:
+  port: 8000
+
+management:
+  endpoint.health.probes.enabled: true
+  health:
+    livenessState.enabled: true
+    readinessState.enabled: true
+
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+
+
+
+
+
+      routes:
+        - id: auth-service
+          uri: http://auth.cosmost.shop
+          predicates:
+            - Path=/v1/auths/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/auth-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+        - id: auth-service
+          uri: http://auth.cosmost.shop
+          predicates:
+            - Path=/v1/signin/**, /v1/auths/**
+            - Method=POST, PUT
+
+        - id: auth-service
+          uri: http://auth.cosmost.shop
+          predicates:
+            - Path=/v1/validation/**, /v1/authorization/**, /v1/view/info/**
+            - Method=GET, PUT
+
+
+
+
+        - id: cosmost-service
+          uri: http://cosmost.cosmost.shop
+          predicates:
+            - Path=/v1/cosmosts/**
+            - Method=POST, PUT, DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/cosmost-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+        - id: cosmost-service
+          uri: http://cosmost.cosmost.shop
+          predicates:
+            - Path=/v1/cosmosts/**
+            - Method=GET
+
+
+
+        - id: comment-service
+          uri: http://comment.cosmost.shop
+          predicates:
+            - Path=/v1/comments/**
+            - Method=POST, PUT, DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/comment-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+        - id: comment-service
+          uri: http://comment.cosmost.shop
+          predicates:
+            - Path=/v1/comments/**, /v1/view, /v1/view/ranking/rate/**
+            - Method=GET
+
+
+
+
+        - id: popularity-service
+          uri: http://popularity.cosmost.shop
+          predicates:
+            - Path=/v1/popularities/**
+            - Method=POST, DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/popularity-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+        - id: popularity-service
+          uri: http://popularity.cosmost.shop
+          predicates:
+            - Path=/v1/popularities/**, /v1/view/ranking/popularity/**
+            - Method=GET
+
+
+
+
+        - id: board-service
+          uri: http://board.cosmost.shop
+          predicates:
+            - Path=/v1/boards/**
+            - Method=POST, DELETE, PUT
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/board-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+        - id: board-service
+          uri: http://board.cosmost.shop
+          predicates:
+            - Path=/v1/boards/**
+            - Method=GET
+
+token:
+  expiration_time: 86400000
+  secret: COS-MOST-TEAM-SECRET-KEY
