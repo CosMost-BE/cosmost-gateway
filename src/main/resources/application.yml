@@ -15,17 +15,7 @@ spring:
     gateway:
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "http://gateway.cosmost.shop"
-            allow-credentials: true
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
+
 
 
 
@@ -35,7 +25,7 @@ spring:
           uri: http://auth.cosmost.shop
           predicates:
             - Path=/v1/auths/**
-            - Method=PUT, GET
+            - Method=GET
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/auth-service/(?<segment>.*), /$\{segment}
@@ -45,13 +35,13 @@ spring:
           uri: http://auth.cosmost.shop
           predicates:
             - Path=/v1/signin/**, /v1/auths/**
-            - Method=POST
+            - Method=POST, PUT
 
         - id: auth-service
           uri: http://auth.cosmost.shop
           predicates:
-            - Path=/v1/validation/**, /v1/authorization/**, /v1/view/**
-            - Method=GET
+            - Path=/v1/validation/**, /v1/authorization/**, /v1/view/info/**
+            - Method=GET, PUT
 
 
 
@@ -87,7 +77,7 @@ spring:
         - id: comment-service
           uri: http://comment.cosmost.shop
           predicates:
-            - Path=/v1/comments/**, /v1/view/**
+            - Path=/v1/comments/**, /v1/view, /v1/view/ranking/rate/**
             - Method=GET
 
 
@@ -106,7 +96,7 @@ spring:
         - id: popularity-service
           uri: http://popularity.cosmost.shop
           predicates:
-            - Path=/v1/popularities/**, /v1/view/**
+            - Path=/v1/popularities/**, /v1/view/ranking/popularity/**
             - Method=GET
 
 
@@ -116,7 +106,7 @@ spring:
           uri: http://board.cosmost.shop
           predicates:
             - Path=/v1/boards/**
-            - Method=POST, DELETE
+            - Method=POST, DELETE, PUT
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/board-service/(?<segment>.*), /$\{segment}
